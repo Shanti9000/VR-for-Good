@@ -2,9 +2,10 @@
 const items = document.querySelectorAll('.item');
 
 // Get all the bins
-const paperBin = document.getElementById('paper-bin');
-const plasticBin = document.getElementById('plastic-bin');
-const metalBin = document.getElementById('metal-bin');
+const bins = document.querySelectorAll('.bin');
+
+// Initialize points
+let points = 0;
 
 // Add drag and drop event listeners to items
 items.forEach(item => {
@@ -13,7 +14,7 @@ items.forEach(item => {
 });
 
 // Add drag event listeners to bins
-[paperBin, plasticBin, metalBin].forEach(bin => {
+bins.forEach(bin => {
     bin.addEventListener('dragover', dragOver);
     bin.addEventListener('drop', dropItem);
 });
@@ -39,7 +40,11 @@ function dropItem(e) {
 
     if (validateDrop(draggedItem, e.target)) {
         e.target.appendChild(draggedItem);
-        alert("Correct! " + draggedItem.innerText + " goes in the " + e.target.innerText + ".");
+        alert("Correct! " + draggedItem.alt + " goes in the " + e.target.alt + ".");
+        
+        // Increment points for correct drop
+        points++;
+        updatePointsDisplay();
     } else {
         alert("Incorrect! Try again.");
     }
@@ -47,12 +52,19 @@ function dropItem(e) {
 
 // Function to check if the item matches the bin
 function validateDrop(item, bin) {
-    if (bin.id === 'paper-bin' && (item.id === 'paper1' || item.id === 'paper2')) {
+    if (bin.id === 'recycling-bin' && (item.id === 'water-bottle' || item.id === 'tin-can')) {
         return true;
-    } else if (bin.id === 'plastic-bin' && (item.id === 'plastic1' || item.id === 'plastic2')) {
+    } else if (bin.id === 'garbage-bin' && (item.id === 'chip-bag' || item.id === 'plastic-straw')) {
         return true;
-    } else if (bin.id === 'metal-bin' && (item.id === 'metal1' || item.id === 'metal2')) {
+    } else if (bin.id === 'compost-bin' && (item.id === 'banana-peel' || item.id === 'apple-core')) {
         return true;
     }
     return false;
 }
+
+// Function to update the points display
+function updatePointsDisplay() {
+    const pointsDisplay = document.getElementById('points-display');
+    pointsDisplay.innerText = `Points: ${points}`;
+}
+
